@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -25,7 +26,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+       return view('usuarios.create',[
+            'user' => new User
+       ]);
     }
 
     /**
@@ -36,7 +39,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User();
+
+        $user->name = $request->get('name');
+        $user->last_name = $request->get('last_name');
+        $user->proceedings = $request->get('proceedings');
+        $user->ableness = $request->get('ableness');
+        $user->address = $request->get('address');
+        $user->email = $request->get('email');
+        $user->note = $request->get('note');
+        $user->password = Hash::make('12345678');
+        $user->save();
+
+        return redirect()->route('user.index');
     }
 
     /**
@@ -56,9 +71,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, User $user)
     {
-        //
+
+        return view('usuarios.edit',[
+            'user' =>$user
+        ]);
     }
 
     /**
@@ -70,7 +88,23 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+
+        $user->name = $request->get('name');
+        $user->last_name = $request->get('last_name');
+        $user->proceedings = $request->get('proceedings');
+        $user->ableness = $request->get('ableness');
+        $user->address = $request->get('address');
+        $user->email = $request->get('email');
+        $user->note = $request->get('note');
+        $restablecer=$request->input('restablecer');
+
+        if ($restablecer == true){
+            $user->password = Hash::make('123456789');
+        }
+        $user->update();
+
+        return redirect()->route('user.index',$user->id);
     }
 
     /**
@@ -81,6 +115,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->route('user.index');
     }
 }

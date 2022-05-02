@@ -26,3 +26,8 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 Route::get('/usuarios',[UserController::class,'index'])->name('user.index');
+Route::get('usuarios/create',[UserController::class,'create'])->name('user.create');
+Route::get('/usuarios/{user}/edit',[UserController::class,'edit'])->name('user.edit');
+Route::put('/usuarios/{id}/update',[UserController::class,'update'])->name('user.update');
+Route::post('/usuarios/store',[UserController::class,'store'])->name('user.store');
+Route::delete('/usuarios/{id}/delete',[UserController::class,'destroy'])->name('user.destroy');
